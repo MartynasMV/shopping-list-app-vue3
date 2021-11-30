@@ -27,11 +27,10 @@
 					v-model="newItem"
 					placeholder="Add an item"
 				/>
-				<br />
-				<br />
+
 				<label>
-					<input type="checkbox" v-model="newItemHighPriority" /> High
-					Priority</label
+					<input type="checkbox" v-model="newItemHighPriority" />
+					High Priority</label
 				>
 				<button
 					class="btn btn-primary"
@@ -46,7 +45,33 @@
 				Congrats, you bought all of your items!
 			</p>
 			<ul>
-				<li v-for="(item, index) in items" :key="item.id">{{item.label}}</li>
+				<!--example how to use Array class binding
+					<li
+					v-for="(item, index) in items"
+					:key="item.id"
+					class="static-class"
+					:class="[
+					item.purchased ? 'strikeout text-gray'  : '',
+					item.highPriority ? 'priority' : '',
+					'static-class-in-array'
+					
+					]"
+				>
+					{{item.label}}
+				</li> 
+				end of example-->
+
+				<li
+					v-for="(item, index) in items"
+					@click="togglePurchase(item)"
+					:key="item.id"
+					:class="{
+						strikeout: item.purchased,
+						priority: item.highPriority 
+					}"
+				>
+					{{item.label}}
+				</li>
 			</ul>
 		</div>
 		<script src="https://unpkg.com/vue@next"></script>
@@ -55,25 +80,33 @@
 				data() {
 					return {
 						header: "Shopping List App",
-						editing: true, //change to false. True is temporary for testing purposes
+						editing: false,
 						newItem: "",
 						newItemHighPriority: false,
 						items: [
-							/* 	{ id: 1, label: "apples" },
-							{ id: 2, label: "water" },
-							{ id: 3, label: "juice" },
-							{ id: 4, label: "oranges" }, */
+							{ id: 1, label: "apples", purchased: true, highPriority: false },
+							{ id: 2, label: "water", purchased: true, highPriority: false },
+							{ id: 3, label: "juice", purchased: true, highPriority: false },
+							{ id: 4, label: "oranges", purchased: false, highPriority: true },
 						],
 					};
 				},
 				methods: {
 					saveItem() {
-						this.items.push({ id: this.items.length + 1, label: this.newItem });
+						this.items.push({
+							id: this.items.length + 1,
+							label: this.newItem,
+							highPriority: this.newItemHighPriority,
+						});
 						this.newItem = "";
 					},
 					doEdit(key) {
 						this.editing = key;
 						this.newItem = "";
+						this.newItemHighPriority = false;
+					},
+					togglePurchase(item) {
+						item.purchased = !item.purchased;
 					},
 				},
 			}).mount("#shopping-list");
