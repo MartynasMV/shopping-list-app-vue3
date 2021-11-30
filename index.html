@@ -5,27 +5,26 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Shopping List App</title>
-		<link
-			rel="stylesheet"
-			href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-			integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-			crossorigin="anonymous"
-		/>
-		<style>
-			[v-cloak] {
-				display: none;
-			}
-		</style>
+		<link rel="stylesheet" href="style.css" />
 	</head>
 
 	<body>
 		<div id="shopping-list" v-cloak>
-			<h1>{{header || "Welcome"}}</h1>
-			<div class="add-item-form">
+			<div class="header">
+				<h1>{{header || "Welcome"}}</h1>
+				<button v-if="editing" @click="doEdit(false)" class="btn btn-cancel">
+					Cancel
+				</button>
+				<button v-else @click="doEdit(true)" class="btn btn-primary">
+					Add Item
+				</button>
+			</div>
+
+			<div v-if="editing" class="add-item-form">
 				<input
 					@keyup.enter="saveItem"
 					type="text"
-					v-model.lazy="newItem"
+					v-model="newItem"
 					placeholder="Add an item"
 				/>
 				<br />
@@ -34,12 +33,18 @@
 					<input type="checkbox" v-model="newItemHighPriority" /> High
 					Priority</label
 				>
-				<button class="btn btn-primary" @click="saveItem">Save item</button>
+				<button
+					class="btn btn-primary"
+					@click="saveItem"
+					@disabled="newItem.length < 4"
+				>
+					Save item
+				</button>
 			</div>
-			<br />
-			{{newItem}} | {{newItemHighPriority}}
-			<br /><br />
-
+			<!-- 	<a v-bind:href="newItem" target="_blank">Dynamic link</a> -->
+			<p v-if="this.items.length == 0">
+				Congrats, you bought all of your items!
+			</p>
 			<ul>
 				<li v-for="(item, index) in items" :key="item.id">{{item.label}}</li>
 			</ul>
@@ -50,19 +55,24 @@
 				data() {
 					return {
 						header: "Shopping List App",
+						editing: true, //change to false. True is temporary for testing purposes
 						newItem: "",
 						newItemHighPriority: false,
 						items: [
-							{ id: 1, label: "apples" },
+							/* 	{ id: 1, label: "apples" },
 							{ id: 2, label: "water" },
 							{ id: 3, label: "juice" },
-							{ id: 4, label: "oranges" },
+							{ id: 4, label: "oranges" }, */
 						],
 					};
 				},
 				methods: {
 					saveItem() {
-						this.items.push({ id: this.items.lenght + 1, label: this.newItem });
+						this.items.push({ id: this.items.length + 1, label: this.newItem });
+						this.newItem = "";
+					},
+					doEdit(key) {
+						this.editing = key;
 						this.newItem = "";
 					},
 				},
