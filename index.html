@@ -62,7 +62,7 @@
 				end of example-->
 
 				<li
-					v-for="(item, index) in items"
+					v-for="(item, index) in reversedItems"
 					@click="togglePurchase(item)"
 					:key="item.id"
 					:class="{
@@ -90,6 +90,11 @@
 							{ id: 4, label: "oranges", purchased: false, highPriority: true },
 						],
 					};
+				},
+				computed: {
+					reversedItems() {
+						return [...this.items].reverse();
+					},
 				},
 				methods: {
 					saveItem() {
