@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Shopping List App</title>
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+			integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+			crossorigin="anonymous"
+		/>
+		<style>
+			[v-cloak] {
+				display: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="shopping-list" v-cloak>
+			<h1>{{header || "Welcome"}}</h1>
+			<div class="add-item-form">
+				<input type="text" v-model.lazy="newItem" placeholder="Add an item" />
+				<button class="btn btn-primary">Save item</button>
+			</div>
+
+			<!-- 	
+			<strong>Priority</strong>
+					<label>
+				<input type="radio" v-model="newItemPriority" value="High" /> High
+			</label>
+			<label>
+				<input type="radio" v-model="newItemPriority" value="Low" /> Low
+			</label> -->
+			<br />
+			<!-- <label
+				>Priority
+				<select v-model="newItemPriority">
+					<option value="low">Low</option>
+					<option value="high">High</option>
+				</select>
+			</label> -->
+			<label>
+				<input type="checkbox" v-model="newItemHighPriority" /> High
+				Priority</label
+			>
+
+			<br />
+			<!-- 	{{newItem}} | {{newItemPriority}} -->
+
+			{{newItem}} | {{newItemHighPriority}}
+			<br /><br />
+			<!-- <label>
+				<input type="checkbox" value="Cranberries" v-model="iceCreamFlavors" />
+				Cranberries
+			</label>
+			<label>
+				<input type="checkbox" value="Vanilla" v-model="iceCreamFlavors" />
+				Vanilla
+			</label>
+			<label>
+				<input type="checkbox" value="Blueberries" v-model="iceCreamFlavors" />
+				Blueberries
+			</label> -->
+			<ul>
+				<li v-for="(item, index) in items" :key="item.id">{{item.label}}</li>
+			</ul>
+		</div>
+		<script src="https://unpkg.com/vue@next"></script>
+		<script>
+			const shoppingListApp = Vue.createApp({
+				data() {
+					return {
+						header: "Shopping List App",
+						newItem: "",
+						/* newItemPriority: "low", */
+						newItemHighPriority: false,
+						/* iceCreamFlavors: [], */
+						items: [
+							{ id: 1, label: "apples" },
+							{ id: 2, label: "water" },
+							{ id: 3, label: "juice" },
+							{ id: 4, label: "oranges" },
+						],
+					};
+				},
+				methods: {
+					function() {
+						console.log("submitted");
+					},
+				},
+			}).mount("#shopping-list");
+		</script>
+	</body>
+</html>
