@@ -22,14 +22,20 @@
 		<div id="shopping-list" v-cloak>
 			<h1>{{header || "Welcome"}}</h1>
 			<div class="add-item-form">
-				<input type="text" v-model.lazy="newItem" placeholder="Add an item" />
-				<button class="btn btn-primary">Save item</button>
+				<input
+					@keyup.enter="saveItem"
+					type="text"
+					v-model.lazy="newItem"
+					placeholder="Add an item"
+				/>
+				<br />
+				<br />
+				<label>
+					<input type="checkbox" v-model="newItemHighPriority" /> High
+					Priority</label
+				>
+				<button class="btn btn-primary" @click="saveItem">Save item</button>
 			</div>
-			<br />
-			<label>
-				<input type="checkbox" v-model="newItemHighPriority" /> High
-				Priority</label
-			>
 			<br />
 			{{newItem}} | {{newItemHighPriority}}
 			<br /><br />
@@ -55,8 +61,9 @@
 					};
 				},
 				methods: {
-					function() {
-						console.log("submitted");
+					saveItem() {
+						this.items.push({ id: this.items.lenght + 1, label: this.newItem });
+						this.newItem = "";
 					},
 				},
 			}).mount("#shopping-list");
